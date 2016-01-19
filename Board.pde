@@ -15,6 +15,11 @@ class Board
     init();
   }
 
+
+/**
+* Places all pieces onto to the board in their correct starting positions, 
+* with White in rows 6 and 7, and black in rows 0 and 1.
+*/
   void init()
   {
     for (int i =0; i <8; i++)
@@ -43,17 +48,21 @@ class Board
     grid[4][7]=new King (4, 7, WHITE);
   }
 
-  // Gets the piece at the given location on the board.
-  // If the square is empty, returns null.
-  // Assumes r and c are in range 0..7
+  /**
+  * Returns the piece at the given location on the board.
+  * If the square is empty, returns null.
+  * Assumes r and c are in range 0..7
+  */
   Piece get(int c, int r)
   {
     return grid[c][r];
   }
 
 
-  // Moves the piece at (x,y) to location (x2, y2)
-  // Assumes that this is a legal move.
+  /**
+  * Moves the piece at location (x,y) to location (x2, y2)
+  * Assumes that this is a legal move.
+  */
   void move(int x, int y, int x2, int y2)
   {
     Piece p = grid[x][y];

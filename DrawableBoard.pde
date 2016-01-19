@@ -1,35 +1,44 @@
-class DrawableBoard extends Board
+public class DrawableBoard extends Board
 {
   int topBoard;
   int leftBoard;
-  
+
   int boardSize;
   int tileSize;
   int numTiles = 8;
   int col;
   int row;
-  DrawableBoard(int top, int left, int displaySize)
-  {
-    topBoard = top;
-    leftBoard=left;
-    boardSize=displaySize;
 
-    tileSize =boardSize / numTiles ; 
-    //println(boardSize);
-    //println(leftBoard);
-  }
-
-  DrawableBoard()
+  /**
+   * Constructs a board that will be drawn with upper left corner at top, left,
+   * a square with dimensions displaySize x displaySize.
+   */
+   DrawableBoard(int top, int left, int displaySize)
+   {
+   topBoard = top;
+   leftBoard=left;
+   boardSize=displaySize;
+   
+   tileSize =boardSize / numTiles ; 
+   //println(boardSize);
+   //println(leftBoard);
+   }
+   
+   
+  /**
+   * Constructs a board with default location (0,0) and 800 x 800.
+   */
+  public DrawableBoard()
   {
     // Uses default size and location, (0,0) 800 pixels
   }
 
-  /*
-  Returns the number of the row of the board corresponding
-   to the given mouse coordinates, or -1 if the mouse
-   coords are not on the board.
+  /**
+   * Returns the number of the row of the board corresponding
+   * to the given mouse coordinates, or -1 if the mouse
+   * coords are not on the board.
    */
-  int whichRow(int mX, int mY)
+  public int whichRow(int mX, int mY)
   {
     if (mX> leftBoard && mX<leftBoard+boardSize && mY>topBoard && mY<topBoard+boardSize)
     {
@@ -39,12 +48,12 @@ class DrawableBoard extends Board
     return row; // TO DO
   }
 
-  /*
-  Returns the number of the col of the board corresponding
-   to the given mouse coordinates, or -1 if the mouse
-   coords are not on the board.
+  /**
+   * Returns the number of the column of the board corresponding
+   * to the given mouse coordinates, or -1 if the mouse
+   * coords are not on the board.
    */
-  int whichCol(int mX, int mY)
+  public int whichCol(int mX, int mY)
   {
     if (mX> leftBoard && mX<leftBoard+boardSize && mY>topBoard && mY<topBoard+boardSize)
     {
@@ -54,10 +63,10 @@ class DrawableBoard extends Board
     return col;
   }
 
-  // Draws the board in the window.  This is temporary 
-  // code so that we can see if the Board class is working.
-  // Ultimately, drawing will be outside of this class.
-  void draw()
+  /**
+   * Draws the board in the current graphics window.
+   */
+  public void draw()
   {
     fill(0);
     rect(leftBoard, topBoard, boardSize, boardSize);
@@ -97,9 +106,14 @@ class DrawableBoard extends Board
     drawHighlights();
   }
 
-  boolean [][] highlightGrid = new boolean[8][8]; // default values are false
 
-  void drawHighlights()
+
+  private boolean [][] highlightGrid = new boolean[8][8]; // default values are false
+  /**
+   * Draws an indication of each cell that is highlighted.
+   * For example, a thin green circle around the contents of the cell.
+   */
+  public void drawHighlights()
   {
     ellipseMode(CENTER);
     noFill();
@@ -116,8 +130,11 @@ class DrawableBoard extends Board
     }
   }
 
-
-  void setHighlight(int c, int r, boolean status)
+  /**
+   * Sets the given cell to have the status true (highlighted)
+   * or false (not highlighted).
+   */
+  public void setHighlight(int c, int r, boolean status)
   {
     if (c >= 0 && r >=0 && r <8 && c <8)
       highlightGrid[c][r]=status;
