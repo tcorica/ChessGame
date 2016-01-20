@@ -4,14 +4,14 @@ Chess!
  Max: add a facility to display the board in different orientations, e.g., 90 degree rotations
  Amy: Add graphical pieces
  
-  Nick, Anthony:  Essential game play sequence: click, highlight, click, move
+ Nick, Anthony:  Essential game play sequence: click, highlight, click, move
  
  Trevor, Dan: Complete possible moves for each piece
  [Note:  King is pretty tough because of castling!]
  
  Daniel:  Save a snapshot of the game, so that it can be loaded later and continued.
  Mary: Work with Dan on this?
-  
+ 
  */
 
 DrawableBoard b;
@@ -21,13 +21,15 @@ void setup()
   size(1000, 800);
   background(0);
   b = new DrawableBoard(100, 200, 400);
-//  b.move(6, 7, 5, 5);
+  //  b.move(6, 7, 5, 5);
 }
 
 void draw()
 {
   background(200, 0, 0);
   b.draw();
+  fill(0);
+  text(getNumWhite(b), 20, 20);
 }
 
 void clearHighlights()
@@ -36,6 +38,50 @@ void clearHighlights()
     for (int j=0; j< 8; j++)
       b.setHighlight(i, j, false);
 }
+
+
+
+
+
+
+
+
+
+
+int getNumWhite(Board b)
+{
+  int whiteCount=0;
+  for (int i=0; i < 8; i++) {
+    for (int j=0; j < 8; j++) {
+      Piece p = b.get(i, j);
+      if (p != null)
+        if (p.getColor() == true)
+          whiteCount++;
+        else
+        {
+        }
+    }
+  }
+
+  return whiteCount; // temporary code
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -50,7 +96,7 @@ void mouseClicked()
 void testPossibleMove()
 {
   clearHighlights();
-  
+
   // Checking where a piece can move
   int r = b.whichRow(mouseX, mouseY);
   int c = b.whichCol(mouseX, mouseY);
