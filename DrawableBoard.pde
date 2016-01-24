@@ -1,4 +1,4 @@
-public class DrawableBoard extends Board
+class DrawableBoard extends Board
 {
   int topBoard;
   int leftBoard;
@@ -9,36 +9,32 @@ public class DrawableBoard extends Board
   int col;
   int row;
 
-  /**
-   * Constructs a board that will be drawn with upper left corner at top, left,
-   * a square with dimensions displaySize x displaySize.
-   */
-   DrawableBoard(int top, int left, int displaySize)
-   {
-   topBoard = top;
-   leftBoard=left;
-   boardSize=displaySize;
-   
-   tileSize =boardSize / numTiles ; 
-   //println(boardSize);
-   //println(leftBoard);
-   }
-   
-   
-  /**
-   * Constructs a board with default location (0,0) and 800 x 800.
-   */
-  public DrawableBoard()
+  PieceCollection pc = new PieceCollection();
+  //Piece p;
+
+  DrawableBoard(int top, int left, int displaySize)
+  {
+    //p = Piece(row,col, true);
+    topBoard = top;
+    leftBoard=left;
+    boardSize=displaySize;
+
+    tileSize =boardSize / numTiles ; 
+    //println(boardSize);
+    //println(leftBoard);
+  }
+
+  DrawableBoard()
   {
     // Uses default size and location, (0,0) 800 pixels
   }
 
-  /**
-   * Returns the number of the row of the board corresponding
-   * to the given mouse coordinates, or -1 if the mouse
-   * coords are not on the board.
+  /*
+  Returns the number of the row of the board corresponding
+   to the given mouse coordinates, or -1 if the mouse
+   coords are not on the board.
    */
-  public int whichRow(int mX, int mY)
+  int whichRow(int mX, int mY)
   {
     if (mX> leftBoard && mX<leftBoard+boardSize && mY>topBoard && mY<topBoard+boardSize)
     {
@@ -48,12 +44,12 @@ public class DrawableBoard extends Board
     return row; // TO DO
   }
 
-  /**
-   * Returns the number of the column of the board corresponding
-   * to the given mouse coordinates, or -1 if the mouse
-   * coords are not on the board.
+  /*
+  Returns the number of the col of the board corresponding
+   to the given mouse coordinates, or -1 if the mouse
+   coords are not on the board.
    */
-  public int whichCol(int mX, int mY)
+  int whichCol(int mX, int mY)
   {
     if (mX> leftBoard && mX<leftBoard+boardSize && mY>topBoard && mY<topBoard+boardSize)
     {
@@ -63,12 +59,12 @@ public class DrawableBoard extends Board
     return col;
   }
 
-  /**
-   * Draws the board in the current graphics window.
-   */
-  public void draw()
+  // Draws the board in the window.  This is temporary 
+  // code so that we can see if the Board class is working.
+  // Ultimately, drawing will be outside of this class.
+  void draw()
   {
-    fill(0);
+    fill(150);
     rect(leftBoard, topBoard, boardSize, boardSize);
     for (int x=leftBoard; x<boardSize+leftBoard; x=x+(2*tileSize))
     {
@@ -92,28 +88,33 @@ public class DrawableBoard extends Board
       for (int j =0; j<8; j++)
       {
         if (get(i, j) != null )//&& get(i,j) instanceof Pawn)
-        {
+        { 
           fill(255, 0, 0);
           textSize(26);
           textAlign(CENTER, CENTER);
-          text(get(i, j).toString(), (tileSize*i+leftBoard)+.5*tileSize, (tileSize*j+topBoard)+.5*tileSize);
+
+          //text(get(i, j).toString(), (tileSize*i+leftBoard)+.5*tileSize, (tileSize*j+topBoard)+.5*tileSize);
+          //if (get(i, j) instanceof Bishop && get(i, j).getColor() == WHITE)// Test code - pc works for Bishop only!
+          {
+            //println(get(i, j));
+            if (pc.getImage(get(i, j)) !=null)
+              image(pc.getImage(get(i, j)), (tileSize*i+leftBoard)+.5*tileSize, (tileSize*j+topBoard)+.5*tileSize);
+          }
         }
 
         //line(i*tileSize, topBoard, i*tileSize, boardSize+topBoard);
         // line(leftBoard, i*tileSize, boardSize+leftBoard, i*tileSize);
       }
+      //if (p instanceof Bishop)
+      //  if (p.getColor() == Piece.WHITE)
+      //    return wBImage;
     }
     drawHighlights();
   }
 
+  boolean [][] highlightGrid = new boolean[8][8]; // default values are false
 
-
-  private boolean [][] highlightGrid = new boolean[8][8]; // default values are false
-  /**
-   * Draws an indication of each cell that is highlighted.
-   * For example, a thin green circle around the contents of the cell.
-   */
-  public void drawHighlights()
+  void drawHighlights()
   {
     ellipseMode(CENTER);
     noFill();
@@ -130,11 +131,10 @@ public class DrawableBoard extends Board
     }
   }
 
-  /**
-   * Sets the given cell to have the status true (highlighted)
-   * or false (not highlighted).
-   */
-  public void setHighlight(int c, int r, boolean status)
+
+
+
+  void setHighlight(int c, int r, boolean status)
   {
     if (c >= 0 && r >=0 && r <8 && c <8)
       highlightGrid[c][r]=status;

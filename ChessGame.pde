@@ -1,18 +1,34 @@
 /*
 Chess!
  
- Max: add a facility to display the board in different orientations, e.g., 90 degree rotations
- Amy: Add graphical pieces
+ Major changes:
+ Addition of DrawableBoard class
  
+<<<<<<< HEAD
  Nick, Anthony:  Essential game play sequence: click, highlight, click, move
+=======
+ Max, Amy: Complete constructors and new methods at top of DrawableBoard.  
+ Then improve the look of the board.
  
- Trevor, Dan: Complete possible moves for each piece
- [Note:  King is pretty tough because of castling!]
+ Nick, Anthony:  Devise a "top-level" design for the game screen.  The board need not fill 
+ the entire window.  Are there buttons needed?  Sequence of game screens?  Indicator
+ of whose turn it is?  Code what you can, and design clearly what you cannot.
  
+ Trevor, Dan: Complete rest of pieces; then work on possibleMoves() for each
+>>>>>>> refs/heads/gh-pages
+ 
+ 
+<<<<<<< HEAD
  Daniel:  Save a snapshot of the game, so that it can be loaded later and continued.
  Mary: Work with Dan on this?
  
+=======
+>>>>>>> refs/heads/gh-pages
  */
+boolean pieceSelected = false;
+boolean currPlayer = true;
+Piece toMove = null;
+boolean onList = false;
 
 DrawableBoard b;
 
@@ -20,25 +36,31 @@ void setup()
 {
   size(1000, 800);
   background(0);
+<<<<<<< HEAD
   b = new DrawableBoard(100, 200, 400);
   //  b.move(6, 7, 5, 5);
+=======
+  b = new DrawableBoard(200, 300, 400);
+>>>>>>> refs/heads/gh-pages
 }
-
 void draw()
 {
   background(200, 0, 0);
   b.draw();
+<<<<<<< HEAD
   fill(0);
   text(getNumWhite(b), 20, 20);
+=======
+  textSize(50);
+  fill(255);
+  if (currPlayer==true) {
+    text("White's Turn", 500, 50);
+  } else {
+    fill(0);
+    text("Black's Turn", 500, 50);
+  }
+>>>>>>> refs/heads/gh-pages
 }
-
-void clearHighlights()
-{
-  for (int i=0; i< 8; i++)
-    for (int j=0; j< 8; j++)
-      b.setHighlight(i, j, false);
-}
-
 
 
 
@@ -87,6 +109,7 @@ int getNumWhite(Board b)
 
 void mouseClicked()
 {
+<<<<<<< HEAD
   testPossibleMove();
 }
 
@@ -99,52 +122,65 @@ void testPossibleMove()
 
   // Checking where a piece can move
   int r = b.whichRow(mouseX, mouseY);
+=======
+  int row = b.whichRow(mouseX, mouseY);
+>>>>>>> refs/heads/gh-pages
   int c = b.whichCol(mouseX, mouseY);
 
-  Piece theP = b.get(c, r);
-  if (theP != null)
+  if (pieceSelected==false)
   {
-    ArrayList<PVector> moves = theP.possibleMoves();
-    for (PVector m : moves)
-    {
-      b.setHighlight((int)m.x, (int)m.y, true);  
-      //println(p);
-    }
-  }
-}
-
-//========================================================
-//========================================================
-
-// Below is some sample code as the beginning of code to 
-// execute a move based on a string given in chess notation.
-void makeMove(String move)
-{
-  move = "d5";
-  int moveCol = 4;
-  int moveRow = 5;
-
-  int startCol = -1;
-  int startRow = -1;
-  for (int r = 0; r < 8; r++)
-  {
-    for (int c = 0; c < 8; c++)
-    {
-      Piece p = b.get(c, r);
-      ArrayList<PVector> moveList = p.possibleMoves();
-      for (PVector m : moveList)
+    toMove = b.get(c, row);
+    if (toMove != null && toMove.getColor() == currPlayer) {  // Must also check if it's a piece of the plaer whose turn it is.
+      clearHighlights();
+      pieceSelected=true;
+      ArrayList<PVector> moves = toMove.possibleMoves();
+      for (PVector p : moves)
       {
-        if (m.x == moveCol && m.y == moveRow)
-        {
-          startCol = c;
-          startRow = r;
-        }
+        b.setHighlight((int)p.x, (int)p.y, true);
       }
     }
-    if (startCol != -1)
-      b.move(startCol, startRow, moveCol, moveRow);
-    //else
-    // didn't find a source!
+  } else
+  {
+    Piece r = b.get(c, row);
+    if ( (r == null || r.getColor() != toMove.getColor() ) && onList(toMove.possibleMoves(), c, row)) {
+      clearHighlights();
+      b.move(
+        (int)toMove.getLocation().x, 
+        (int)toMove.getLocation().y, 
+        c, 
+        row);
+      pieceSelected = false;
+      currPlayer = !currPlayer;
+    } else if (r != null && r.getColor() == toMove.getColor()) {
+      clearHighlights();
+      toMove=b.get(c, row);
+      ArrayList<PVector> moves = toMove.possibleMoves();
+      for (PVector p : moves)
+      {
+        b.setHighlight((int)p.x, (int)p.y, true);
+      }
+    }
   }
 }
-// End of execute move sample code
+
+boolean onList(ArrayList<PVector> list, int col, int row)
+{
+  for (PVector p : list)
+  {
+    if ((int) p.x == col && (int) p.y == row)
+      return true;
+  }
+  return false;
+}
+
+// possible add to drawble board?VVV
+void clearHighlights()
+{
+  for (int i = 0; i<8; i++)
+  {
+    for (int j =0; j<8; j++)
+    {
+      b.setHighlight(i, j, false);
+    }
+  }
+}
